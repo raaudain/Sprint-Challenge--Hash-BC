@@ -21,10 +21,15 @@ def proof_of_work(last_proof):
     """
 
     start = timer()
+    
+    # Used to hash proof of last hash
+    last_hash = hashlib.sha256(f"{last_proof}".encode())
 
     print("Searching for next proof")
     proof = 0
     #  TODO: Your code here
+    while not valid_proof(last_hash, proof):
+        proof += 1
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -40,7 +45,23 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    pass
+    previous_hash = last_hash.hexdigest()
+    current_guess = f"{proof}".encode()
+    current_hash = hashlib.sha256(current_guess).hexdigest()
+    
+    # print("previous", previous_hash)
+    # print("current", current_hash)
+    
+    if current_hash[:5] == previous_hash[-5:]:
+        # print("previous", previous_hash)
+        # print("previous", previous_hash[-5:])
+        # print("current", current_hash)
+        # print("current", current_hash[:5])
+        return True
+    else:
+        return False
+        
+    
 
 
 if __name__ == '__main__':
